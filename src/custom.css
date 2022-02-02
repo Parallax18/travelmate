@@ -1,0 +1,35 @@
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
+.bg-custom{
+    /* background: url("./assets/bgwhite.svg") top center/cover no-repeat; */
+}
+
+.bg-overlay{
+    background: rgba(0, 0, 0, 0.686);
+}
+
+.z-topmost{
+    z-index: 1000;
+    backdrop-filter: blur(40);
+}
+
+.bg-blur{
+    filter:  blur(59)
+}
+
+.modal-open{
+    overflow-y: hidden;
+}
+
+.modal-scroll-bar::-webkit-scrollbar{
+    width: 5px;
+    height: 100%;
+    background: rgb(255, 255, 255);
+    border-radius: 30px;
+}
+
+.modal-scroll-bar::-webkit-scrollbar-thumb{
+    background: rgb(232, 232, 232);
+}
