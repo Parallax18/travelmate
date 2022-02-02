@@ -18,7 +18,8 @@ var config = {
 
 function search () {
    fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyCqycPN3VUyOaYPmQaIhJaxpCHc6Bef-II&libraries=places', {
-       method: 'GET'
+       method: 'GET',
+       mode:"no-cors"
    })
    .then(res => res.json())
    .then(data => console.log(data))
