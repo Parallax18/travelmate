@@ -1,28 +1,23 @@
+// Create a function to enable auto complete
+function initAutocomplete() {
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        mapTypeId: "roadmap",
+    });
 
+    // Create the search box and link it to the UI element.
+    const input = document.getElementById("search-input-open");
+    const searchBox = new google.maps.places.SearchBox(input);
 
-var config = {
-  method: 'get',
-  url: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB3tHHK3zrUIxa08Kz5wti8bkcKWSCCXD0&libraries=places',
-//   url: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Museum%20of%20Contemporary%20Art%20Australia&inputtype=textquery&fields=formatted_address&key=AIzaSyB3tHHK3zrUIxa08Kz5wti8bkcKWSCCXD0',
-  headers: { }
-};
-
-{/* <script async
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap">
-</script> */}
-
-{/* <script async
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap">
-</script> */}
-
-
-function search () {
-   fetch('https://maps.googleapis.com/maps/api/js?key=AIzaSyCqycPN3VUyOaYPmQaIhJaxpCHc6Bef-II&libraries=places', {
-       method: 'GET'
-   })
-   .then(res => res.json())
-   .then(data => console.log(data))
+    // Listen for the event fired when the user selects a prediction and retrieve
+    // more details for that place.
+    searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+        console.log(places)
+        if (places.length == 0) {
+            return;
+        }
+    });
 }
 
-
-search()
+initAutocomplete();
