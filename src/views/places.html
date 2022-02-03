@@ -42,9 +42,9 @@
 
 <main class="px-32">
     <section class="mt-32 relative w-full rounded-md h-96">
-        <img src="../assets/heromain.jpg" alt="" class="rounded-2xl h-full w-full object-cover">
+        <img src="../assets/heromain.jpg" alt="" id="hero-img" class="rounded-2xl h-full w-full object-cover">
         <div class="absolute z-10 top-0 p-12 bg-overlay h-full rounded-2xl">
-            <h2 class="text-primary font-bold text-4xl mb-7">
+            <h2 class="text-primary font-bold text-4xl mb-7" id="hero-header">
                 The <br> Perfect Holiday <br> Destinations
             </h2>
             <p class="text-gray-200 w-1/2">The best holiday destinations selected for your next vacation. Wherever you
@@ -74,7 +74,7 @@
                     you want to go, we have the perfect city guuide for you.</p>
 
                 <div class="flex mt-10 w-2/5">
-                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md">Discover</button>
+                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md btn" id="destinations-btn">Discover</button>
                 </div>
             </div>
         </section>
@@ -88,7 +88,7 @@
                     you want to go, we have the perfect city guuide for you.</p>
 
                 <div class="flex mt-10 rounded-full w-2/5">
-                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md">Discover</button>
+                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md btn" id='hotels-btn'>Discover</button>
                 </div>
             </div>
         </section>
@@ -102,7 +102,7 @@
                     you want to go, we have the perfect city guuide for you.</p>
 
                 <div class="flex mt-10 rounded-full w-2/5">
-                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md">Discover</button>
+                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md btn" id="restaurants-btn">Discover</button>
                 </div>
             </div>
         </section>
@@ -116,7 +116,7 @@
                     you want to go, we have the perfect city guuide for you.</p>
 
                 <div class="flex mt-10 rounded-full w-2/5">
-                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md">Discover</button>
+                    <button class="py-2 px-3 text-gray-900 bg-white font-bold w-full rounded-md  btn" id="attractions-btn">Discover</button>
                 </div>
             </div>
         </section>
@@ -200,7 +200,7 @@
 
 <div class="fixed top-0 left-0 w-full z-topmost h-full flex justify-center" id="modal">
     <div class="bg-overlay h-full w-full absolute" id="modal-bg"></div>
-    <div class="bg-white rounded-md p-7 w-1/2 h-96 mt-12 z-50">
+    <div class="bg-white rounded-md p-7 w-1/2 h-96 mt-12 z-50" style="overflow: hidden">
         <div class="flex rounded-full w-full">
             <input id="search-input" autofocus type="text" placeholder="search"
                    class="bg-white rounded-tl-full rounded-bl-full p-2 w-full focus:border-primary border outline-none">
@@ -208,7 +208,7 @@
                 <img src="../assets/search.svg">
             </div>
         </div>
-        <div id="results" class="h-5/6 w-full flex justify-center mt-5 overflow-y-scroll modal-scroll-bar" style="padding-bottom: 10px">
+        <div id="results" class="h-full w-full flex justify-center mt-5 overflow-y-scroll modal-scroll-bar" style="padding-bottom: 10px">
             <ul class="w-full space-y-3 mr-3" id="search-result-list">
                 <!--space for js injection-->
             </ul>
@@ -222,6 +222,6 @@
 <script src="../app.js"></script>
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
-<!-- <script src="../utils.js"></script> -->
+<script src="../utils.js"></script>
 </body>
 </html>
