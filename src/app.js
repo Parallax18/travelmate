@@ -1,64 +1,68 @@
-const searchInput = document.querySelector('#search-input');
-let searchResultList;
-
-
+//Select the main search field box
 const searchInputOpen = document.querySelector('#search-input-open');
+
+//Select the search field
+const searchInput = document.querySelector('#search-input');
+
+// get the modals on the page
 const modal = document.querySelector('#modal');
 const modalBackdrop = document.querySelector('#modal-bg');
 modal.remove();
 
+let searchResultList;
+let getNext;
 
-let suggestions = [];
+// Auto complete function to help get the locations
+function autoComplete() {
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        mapTypeId: "roadmap",
+    });
 
-// Auto complete function
-const autoComplete = (e) => {
-    const event = e
-    fetch(`https://travel-advisor.p.rapidapi.com/locations/v2/auto-complete?query=${e.target.value}&lang=en_US&units=km`, {
-	"method": "GET",
-	"headers": {
-		"x-rapidapi-host": "travel-advisor.p.rapidapi.com",
-		"x-rapidapi-key": "5d63c720fdmshaa85f891267c44cp1dc110jsna83bb5c8a63d"
-	}
-})
-.then(response =>  response.json())
-.then(data => data.data.Typeahead_autocomplete.results)
-.then(data => {
-    console.log(event)
-    data.forEach((item) => {
-        const suggestedItem = {}
-        suggestedItem.name = item.detailsV2.names.name == null ? "-----_---" : item.detailsV2.names.name
-        suggestedItem.address = item.detailsV2.contact.streetAddress.street1 == null ? "-----_---" : item.detailsV2.contact.streetAddress.street1
-        suggestedItem.img = item.image.photo.photoSizeDynamic.urlTemplate.replace('{height}', '100')
-        suggestedItem.img = suggestedItem.img.replace('{width}', '100')
-        suggestions = [...suggestions, suggestedItem]
-        buildSearchResult(suggestedItem)
+    // Create the search box and link it to the UI element.
+    var service = new google.maps.places.PlacesService(map);
 
+    // check if the input field value count is greater than equals to 3
+    // if true run the google services api
+    if (searchInput.value.length >= 3) {
+        service.textSearch({
+            query: searchInput.value
+        }, (places, status, pages) => {
+            console.log(places)
 
-        return suggestions
-    })
-})
-.catch(err => {
-	console.error(err);
-});
+            for (let i = 0; i < places.length; i++) {
+                // get only operational places
+                if(places[i].business_status ==="OPERATIONAL"){
+                    buildSearchResult(places[i])
+                }
+            }
+            getNext = pages;
+        })
+    }
 }
 
-// Debounce funtion to reduce ammount of API calls
-function debounce(e) {
+// Debounce function to reduce amount of API calls
+// This will only call the autoComplete fn is no key is pressed under 2 sec
+let timer;
+
+function debounce() {
     console.log('typing....')
-    let timer;
-    return (() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => autoComplete(e), 2000);
-    })();
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+        searchResultList.innerHTML = ""
+        autoComplete();
+    }, 2000);
+
 };
 
-searchInput.addEventListener('keydown', debounce) 
+// Fire the debounce function on keydown
+searchInput.addEventListener('keydown', debounce)
 
+// Open the custom modal when the search button is clicked
 searchInputOpen.addEventListener('click', () => {
     document.body.classList.add('modal-open')
     document.body.appendChild(modal)
     searchResultList = document.getElementById('search-result-list')
-    console.log(searchResultList)
 })
 
 modalBackdrop.addEventListener('click', () => {
@@ -67,70 +71,18 @@ modalBackdrop.addEventListener('click', () => {
 })
 
 
-// search function
-// const search = () => {
-//     fetch("https://travel-advisor.p.rapidapi.com/locations/v2/list-nearby?currency=USD&units=km&lang=en_US", {
-//     "method": "POST",
-//     "headers": {
-//         "content-type": "application/json",
-//         "x-rapidapi-host": "travel-advisor.p.rapidapi.com",
-//         "x-rapidapi-key": "5d63c720fdmshaa85f891267c44cp1dc110jsna83bb5c8a63d"
-//     },
-//     "body": {
-//         "contentId": "cc8fc7b8-88ed-47d3-a70e-0de9991f6604",
-//         "contentType": "restaurant",
-//         "filters": [
-//             {
-//                 "id": "placetype",
-//                 "value": [
-//                     "hotel",
-//                     "attraction",
-//                     "restaurant"
-//                 ]
-//             },
-//             {
-//                 "id": "minRating",
-//                 "value": [
-//                     "30"
-//                 ]
-//             }
-//         ],
-//         "boundingBox": {
-//             "northEastCorner": {
-//                 "latitude": 12.248278039408776,
-//                 "longitude": 109.1981618106365
-//             },
-//             "southWestCorner": {
-//                 "latitude": 12.243407232845051,
-//                 "longitude": 109.1921640560031
-//             }
-//         }
-//     }
-// })
-// .then(response => {
-//     console.log(response);
-// })
-// .catch(err => {
-//     console.error(err);
-// });
-// }
-
-// search()
-
-
-// Build search results
+// Build search results in the custom modal
 const buildSearchResult = (result) => {
     const resultItem = document.createElement('li')
-    // resultItem.addEventListener('click', search)
 
     resultItem.innerHTML = `
     <li class="flex justify-between w-full mb-5 cursor-pointer">
         <div>
             <p class="font-medium text-base">${result.name}</p>
-            <p class=" text-sm text-gray-400">${result.address}</p>
+            <p class=" text-sm text-gray-400">${result.formatted_address}</p>
         </div>
         <div>
-            <img src=${result.img} alt="" class="w-14 h-14 object-cover">
+            <img src=${result?.photos[0]?.getUrl()} alt=${result.name} class="w-14 h-14 object-cover"/>
         </div>
     </li>
     `
