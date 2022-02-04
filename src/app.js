@@ -98,7 +98,7 @@ function buildSearchResult (result, type, places) {
     `
 
     console.log(result)
-    localStorage.setItem('viewedLocation', JSON.stringify(result?.photos[0]))
+    localStorage.setItem('viewedLocation', JSON.stringify(result))
     // Check of the selected place is a country
     // If is a country it opens the places.. else goes straight to map
     if (type == "locality"){
