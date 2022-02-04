@@ -5,7 +5,7 @@ const sideBar = document.getElementById('side-bar');
 function buildPlaces(place)  {
     const placeCard = document.createElement('div');
 
-    const photo =  '../assets/heromain.jpg'
+    const photo =  '../assets/imgs/heromain.jpg'
 
     placeCard.innerHTML = `
     <div class="bg-white rounded-md flex shadow-md mb-5 max-h-36 cursor-pointer">
@@ -30,7 +30,7 @@ function buildPlaces(place)  {
 
 
 // If the search was not a country, It will give an array
-// Checking if it is an arrya or not
+// Checking if it is an array or not
 if(places[0]){
     for(i = 0; i < places.length; i++){
         buildPlaces(places[i])
@@ -44,6 +44,11 @@ else{
 // Initialize map to load first place on the list
 let map;
 async function initMap() {
+    // Added a recursive call to run this function if google class is available removing this will cause an error in the console in dev tools
+    if(google === undefined){
+        initMap();
+        return;
+    }
     let lat;
     let lng;
     if(places[0]){
@@ -57,8 +62,6 @@ async function initMap() {
         center: { lat, lng },
         zoom: 8,
     });
-
-
 
     // set marker
     new google.maps.Marker({
@@ -83,6 +86,4 @@ async function viewOnMap(place) {
       });
 }
 
-
-initMap()
 

@@ -111,7 +111,7 @@ function buildSearchResult (result, type, places) {
     }else {
         localStorage.setItem('places', JSON.stringify(result))
         resultItem.addEventListener('click', () => {
-            window.location.href = './map.html'
+            window.location.href = '../../map.html'
             // viewLocality(result, places)
             }
         )
