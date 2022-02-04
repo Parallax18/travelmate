@@ -3,8 +3,6 @@ const viewedLocation = JSON.parse(localStorage.getItem('viewedLocation'))
 const buttons = document.querySelectorAll('.btn');
 const heroImg = document.querySelector('#hero-img');
 
-
-
 // MODIFY STATE OF PAGE FOR SELECTED LOCATION
 function setPageState () {
     heroHeader.innerText = viewedLocation.name;
@@ -39,7 +37,7 @@ function nearbySearch(type){
         if (status == google.maps.places.PlacesServiceStatus.OK){
             for (let i = 0; i < res.length; i++) {
                 if(res[i].business_status ==="OPERATIONAL"){
-                    window.location.href = 'http://127.0.0.1:5500/src/views/map.html'
+                    window.location.href = './map.html'
                 }
             }
         }
@@ -47,7 +45,7 @@ function nearbySearch(type){
 }
 
 
-// Choose from hotes|restaurants|others
+// Choose from hotels|restaurants|others
 function makeChoice(e) {
     const choices = {
         "hotels-btn" : "lodging",

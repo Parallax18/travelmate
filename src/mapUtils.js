@@ -57,6 +57,9 @@ async function initMap() {
         center: { lat, lng },
         zoom: 8,
     });
+
+
+
     // set marker
     new google.maps.Marker({
         position: { lat, lng },
@@ -65,7 +68,7 @@ async function initMap() {
       });
 }
 
-// Viewing seclected place on map
+// Viewing selected place on map
 async function viewOnMap(place) {
     const lat = place.geometry.location.lat
     const lng =  place.geometry.location.lng
