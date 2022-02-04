@@ -6,9 +6,8 @@ const heroImg = document.querySelector('#hero-img');
 
 
 // MODIFY STATE OF PAGE FOR SELECTED LOCATION
-const setPageState = () => {
+function setPageState () {
     heroHeader.innerText = viewedLocation.name;
-    // heroImg.src = viewedLocation.photos[0]?.getUrl()
 
     for(let i = 0; i < buttons.length; i++){
         buttons[i].addEventListener('click', (e) => makeChoice(e))
@@ -18,8 +17,8 @@ const setPageState = () => {
 
 setPageState()
 
-
-const nearbySearch = (type) => {
+// Search nearby places within a city
+function nearbySearch(type){
     const request = {
         location,
         type,
@@ -35,14 +34,11 @@ const nearbySearch = (type) => {
 
 
     service.nearbySearch(request, (res, status) => {
-        console.log(res)
         localStorage.setItem('places', JSON.stringify(res))
 
         if (status == google.maps.places.PlacesServiceStatus.OK){
             for (let i = 0; i < res.length; i++) {
                 if(res[i].business_status ==="OPERATIONAL"){
-                    // buildSearchResult(res[i])
-                    
                     window.location.href = 'http://127.0.0.1:5500/src/views/map.html'
                 }
             }
@@ -51,11 +47,8 @@ const nearbySearch = (type) => {
 }
 
 
-// restaurants-btn
-// attractions-btn
-// destinations-btn
-
-const makeChoice = (e) => {
+// Choose from hotes|restaurants|others
+function makeChoice(e) {
     const choices = {
         "hotels-btn" : "lodging",
         "restaurants-btn" : "restaurant",

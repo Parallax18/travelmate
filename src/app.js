@@ -31,20 +31,17 @@ function autoComplete() {
         }, (places, status, pages) => {
             console.log(places)
 
+            //Check if search value is a city 
             for (let i = 0; i < places.length; i++){
-                if (places[i].types[0] = "locality" && !places[i].business_status ){
+                if (places[i].types[0] == "locality" && !places[i].business_status ){
                     buildSearchResult(places[i], "locality", places)
-                }else if(places[i].business_status){
-                    console.log('hello')
+                }else if(places[i].business_status){    //citoes do not have business_status property
                     // get only operational places
                     if(places[i].business_status ==="OPERATIONAL"){
                         buildSearchResult(places[i], "others", places)
                     }
                 }
             }
-            // for (let i = 0; i < places.length; i++) {
-                
-            // }
             getNext = pages;
         })
     }
@@ -82,7 +79,7 @@ modalBackdrop.addEventListener('click', () => {
 
 
 // Build search results in the custom modal
-const buildSearchResult = (result, type, places) => {
+function buildSearchResult (result, type, places) {
     const resultItem = document.createElement('li')
     console.log(result?.photos[0])
 
@@ -99,6 +96,8 @@ const buildSearchResult = (result, type, places) => {
         </div>
     </li>
     `
+    // Check of the selected place is a country
+    // If is a country it opens the places.. else goes straight to map
     if (type == "locality"){
         localStorage.setItem('viewedLocation', JSON.stringify(result))
         // localStorage.setItem('places', JSON.stringify(places))

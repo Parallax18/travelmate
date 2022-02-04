@@ -1,11 +1,9 @@
 const places = JSON.parse(localStorage.getItem('places'))
-console.log(places)
-
 const sideBar = document.getElementById('side-bar');
 
-const buildPlaces = (place) => {
+// Build paces components
+function buildPlaces(place)  {
     const placeCard = document.createElement('div');
-    // console.log(place?.photos[0])
 
     const photo =  '../assets/heromain.jpg'
 
@@ -30,6 +28,9 @@ const buildPlaces = (place) => {
     sideBar.appendChild(placeCard)
 }
 
+
+// If the search was not a country, It will give an array
+// Checking if it is an arrya or not
 if(places[0]){
     for(i = 0; i < places.length; i++){
         buildPlaces(places[i])
@@ -39,8 +40,9 @@ else{
     buildPlaces(places)
 }
 
-let map;
 
+// Initialize map to load first place on the list
+let map;
 async function initMap() {
     let lat;
     let lng;
@@ -55,6 +57,7 @@ async function initMap() {
         center: { lat, lng },
         zoom: 8,
     });
+    // set marker
     new google.maps.Marker({
         position: { lat, lng },
         map,
@@ -62,6 +65,7 @@ async function initMap() {
       });
 }
 
+// Viewing seclected place on map
 async function viewOnMap(place) {
     const lat = place.geometry.location.lat
     const lng =  place.geometry.location.lng
