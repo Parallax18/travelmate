@@ -81,7 +81,7 @@ modalBackdrop.addEventListener('click', () => {
 // Build search results in the custom modal
 function buildSearchResult (result, type, places) {
     const resultItem = document.createElement('li')
-    console.log(result?.photos[0])
+    console.log(result?.photos[0].getUrl)
 
     resultItem.innerHTML = `
     <li class="flex justify-between w-full mb-5 cursor-pointer">
@@ -96,10 +96,13 @@ function buildSearchResult (result, type, places) {
         </div>
     </li>
     `
+
+    console.log(result)
+    localStorage.setItem('viewedLocation', JSON.stringify(result?.photos[0]))
     // Check of the selected place is a country
     // If is a country it opens the places.. else goes straight to map
     if (type == "locality"){
-        localStorage.setItem('viewedLocation', JSON.stringify(result))
+        
         // localStorage.setItem('places', JSON.stringify(places))
         resultItem.addEventListener('click', () => {
             window.location.href = 'http://127.0.0.1:5500/src/views/places.html'
