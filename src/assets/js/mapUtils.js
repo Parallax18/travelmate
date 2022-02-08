@@ -1,5 +1,8 @@
 const places = JSON.parse(localStorage.getItem('places'))
 const sideBar = document.getElementById('side-bar');
+const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'))
+
+
 
 // Build paces components
 function buildPlaces(place)  {
@@ -47,6 +50,7 @@ async function initMap() {
     // Added a recursive call to run this function if google class is available removing this will cause an error in the console in dev tools
     if(google === undefined){
         initMap();
+        // google.maps.event.addDomListener(window, 'load', initialize);
         return;
     }
     let lat;
