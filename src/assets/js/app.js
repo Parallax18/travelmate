@@ -99,7 +99,7 @@ function buildSearchResult (result, type, places) {
     </li>
     `
     // Check of the selected place is a country
-    // If is a country it opens the places.. else goes straight to map
+    // If is a country it opens the places else goes straight to map
     if (type == "locality"){
         localStorage.setItem('viewedLocation', JSON.stringify(result))
         // localStorage.setItem('places', JSON.stringify(places))
@@ -111,7 +111,7 @@ function buildSearchResult (result, type, places) {
     }else {
         localStorage.setItem('places', JSON.stringify(result))
         resultItem.addEventListener('click', () => {
-            window.location.href = '../../map.html'
+            window.location.href = './map.html'
             // viewLocality(result, places)
             }
         )
