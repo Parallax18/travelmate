@@ -1,28 +1,27 @@
-//Select the main search field box
-const searchInputOpen = document.querySelector('#search-input-open');
-
 //Select the search field
-const searchInput = document.querySelector('#search-input');
+var searchInput = document.querySelector('#search-input');
+var searchBox = document.querySelector('#searchBox');
+var searchBtn = document.querySelector('#searchBtn');
 
-// get the modals on the page
-const modal = document.querySelector('#modal');
-const modalBackdrop = document.querySelector('#modal-bg');
-modal.remove();
+var myModal = new bootstrap.Modal(document.getElementById('myModal'), {})
 
-let searchResultList;
-let getNext;
+var searchResultList = document.querySelector(".searchItem");
 
-// Auto complete function to help get the locations
-function autoComplete() {
-    const map = new google.maps.Map(document.getElementById("map"), {
+var getNext;
+var map;
+var service;
+
+function initMap(){
+    map = new google.maps.Map(document.getElementById("map"), {
         zoom: 13,
         mapTypeId: "roadmap",
     });
 
-    // Create the search box and link it to the UI element.
-    var service = new google.maps.places.PlacesService(map);
-    
+    service = new google.maps.places.PlacesService(map);
+}
 
+// Auto complete function to help get the locations
+function autoComplete() {
     // check if the input field value count is greater than equals to 3
     // if true run the google services api
     if (searchInput.value.length >= 3) {
@@ -31,16 +30,16 @@ function autoComplete() {
         }, (places, status, pages) => {
 
             //Check if search value is a city 
-            for (let i = 0; i < places.length; i++){
+            for (let i = 0; i < places.length; i++) {
 
                 // Create a new object to hold the images in local storage
                 // places[i].image = places[i].photos[0].getUrl();
 
-                if (places[i].types[0] == "locality" && !places[i].business_status ){
+                if (places[i].types[0] == "locality" && !places[i].business_status) {
                     buildSearchResult(places[i], "locality", places)
-                }else if(places[i].business_status){    //cities do not have business_status property
+                } else if (places[i].business_status) {    //cities do not have business_status property
                     // get only operational places
-                    if(places[i].business_status ==="OPERATIONAL"){
+                    if (places[i].business_status === "OPERATIONAL") {
                         buildSearchResult(places[i], "others", places)
                     }
                 }
@@ -49,7 +48,6 @@ function autoComplete() {
         })
     }
 }
-
 
 // Debounce function to reduce amount of API calls
 // This will only call the autoComplete fn if no key is pressed under half a sec
@@ -68,55 +66,49 @@ function debounce() {
 // Fire the debounce function on keydown
 searchInput.addEventListener('keydown', debounce)
 
-// Open the custom modal when the search button is clicked
-searchInputOpen.addEventListener('click', () => {
-    document.body.classList.add('modal-open')
-    document.body.appendChild(modal)
-    searchResultList = document.getElementById('search-result-list')
-})
+searchBtn.addEventListener("click",()=>{
 
-modalBackdrop.addEventListener('click', () => {
-    document.body.classList.remove('modal-open')
-    modal.remove()
+    // copying search box value to the modal search input
+    searchInput.value = searchBox.value;
+    debounce();
+    myModal.show();
 })
-
 
 // Build search results in the custom modal
-function buildSearchResult (result, type, places) {
-    const resultItem = document.createElement('li')
+function buildSearchResult(result, type, places) {
+    const resultItem = document.createElement('div')
 
     resultItem.innerHTML = `
-    <li class="flex justify-between w-full mb-5 cursor-pointer">
-        <div>
-            <p class="font-medium text-base">${result.name}</p>
-            <p class=" text-sm text-gray-400">
-            ${result.formatted_address ? result.formatted_address : "----_--"}
-            </p>
-        </div>
-        <div>
-            <img src=${result?.photos[0]?.getUrl()} alt=${result.name} class="w-14 h-14 object-cover"/>
-        </div>
-    </li>
-    `
+<a href="./Map.html?name=${result.name}">
+<div class="d-flex flex-row pb-2 pt-2"> 
+    <div class="background-center-center background-cover me-2 pointImg" style="background-image:url('${result?.photos[0]?.getUrl() ?? ""}');"></div>     
+    <div class="pointData"> 
+        <div class="pointName"> <span>${result.name}</span> 
+        </div>         
+        <div class="pointRating"> <span> ${result.formatted_address ? result.formatted_address : "----_--"}</span> 
+        </div>         
+    </div>     
+</div>
+  </a>  `
+
+    searchResultList.appendChild(resultItem);
+
     // Check of the selected place is a country
     // If is a country it opens the places.. else goes straight to map
-    if (type == "locality"){
-        localStorage.setItem('viewedLocation', JSON.stringify(result))
-        // localStorage.setItem('places', JSON.stringify(places))
+    if (type == "locality") {
         resultItem.addEventListener('click', () => {
-            window.location.href = './places.html'
-            // viewLocality(result, places)
+                window.location.href = './map.html'
+                // viewLocality(result, places)
             }
         )
-    }else {
-        localStorage.setItem('places', JSON.stringify(result))
+    } else {
         resultItem.addEventListener('click', () => {
-            window.location.href = '../../map.html'
-            // viewLocality(result, places)
+                window.location.href = './map.html'
+                // viewLocality(result, places)
             }
         )
     }
 
-    searchResultList.appendChild(resultItem)
+
 }
 
