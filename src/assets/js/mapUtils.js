@@ -3,6 +3,8 @@ var searchInput = document.querySelector('#search-input');
 var getNext;
 var service;
 
+
+
 // Build places components
 function buildPlaces(result) {
     const placeCard = document.createElement('div');
@@ -48,28 +50,29 @@ function initMap() {
 
     service = new google.maps.places.PlacesService(map);
     infoWindow = new google.maps.InfoWindow();
-    // let lat;
-    // let lng;
-    //
-    // if (places[0]) {
-    //     lat = places[0].geometry.location.lat
-    //     lng = places[0].geometry.location.lng
-    // } else {
-    //     lat = places.geometry.location.lat
-    //     lng = places.geometry.location.lng
-    // }
-    //
-    // map = new google.maps.Map(document.getElementById("map"), {
-    //     center: {lat, lng},
-    //     zoom: 8,
-    // });
-    //
-    // // set marker
-    // new google.maps.Marker({
-    //     position: {lat, lng},
-    //     map,
-    //     title: places[0] ? places[0].name : places.name,
-    // });
+
+    let lat;
+    let lng;
+
+    if (places[0]) {
+        lat = places[0].geometry.location.lat
+        lng = places[0].geometry.location.lng
+    } else {
+        lat = places.geometry.location.lat
+        lng = places.geometry.location.lng
+    }
+
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: {lat, lng},
+        zoom: 8,
+    });
+
+    // set marker
+    new google.maps.Marker({
+        position: {lat, lng},
+        map,
+        title: places[0] ? places[0].name : places.name,
+    });
 }
 
 // Auto complete function to help get the locations
