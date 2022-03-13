@@ -3,16 +3,24 @@ var searchInput = document.querySelector('#search-input');
 var getNext;
 var service;
 
-const search = window.location.search.split("=")
+const search = window.location.search
+
+let searchParams = new URLSearchParams(search);
+
 console.log(search)
 
-const url = search[1].replaceAll("%20", " ");
+const url = search;
+
 console.log(url)
 
+let lat =searchParams.get('lon') && Number(searchParams.get('lat')) ;
+let lng = searchParams.get('lon') &&  Number(searchParams.get('lon')) ;
+
+console.log({lat, lng})
 // Initialize map to load first place on the list
 var map;
 var infoWindow;
-function initMap(places) {
+function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 13,
         mapTypeId: "roadmap",
@@ -21,28 +29,43 @@ function initMap(places) {
     service = new google.maps.places.PlacesService(map);
     infoWindow = new google.maps.InfoWindow();
 
-    let lat;
-    let lng;
 
-    if (places[0]) {
-        lat = places[0].geometry.location.lat
-        lng = places[0].geometry.location.lng
-    } else {
-        lat = places.geometry.location.lat
-        lng = places.geometry.location.lng
+
+    // console.log({places})
+    //
+    // if(!places){
+    //     console.warn("failed to fetch location")
+    //     return
+    // }
+    //
+    // if (places[0]) {
+    //     lat = places[0].geometry.location.lat
+    //     lng = places[0].geometry.location.lng
+    // } else {
+    //     lat = places.geometry.location.lat
+    //     lng = places.geometry.location.lng
+    // }
+
+
+    if(!lat || !lng){
+        console.warn("no latitude or longitude passed")
+
+        //Todo add fallback map
+        return
     }
+    console.log({lat,lng})
 
     map = new google.maps.Map(document.getElementById("map"), {
-        center: {lat, lng},
-        zoom: 8,
+        center: { lat, lng },
+        zoom: 18,
     });
 
     // set marker
-    new google.maps.Marker({
-        position: {lat, lng},
-        map,
-        title: places[0] ? places[0].name : places.name,
-    });
+    // new google.maps.Marker({
+    //     position: {lat, lng},
+    //     map,
+    //     title: places[0] ? places[0].name : places.name,
+    // });
 }
 
 
@@ -90,6 +113,7 @@ function autoComplete() {
             query: searchInput.value
         }, (places, status, pages) => {
             console.log(places)
+
             //Check if search value is a city
             for (let i = 0; i < places.length; i++) {
                 console.log(places[i])
@@ -130,8 +154,8 @@ searchInput.addEventListener('keydown', debounce)
 
 // Viewing selected place on map
 async function viewOnMap(place) {
-    const lat = place.geometry.location.lat
-    const lng = place.geometry.location.lng
+    lat = place.geometry.location.lat
+    lng = place.geometry.location.lng
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: {lat, lng},

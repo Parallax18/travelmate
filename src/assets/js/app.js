@@ -77,9 +77,11 @@ searchBtn.addEventListener("click",()=>{
 // Build search results in the custom modal
 function buildSearchResult(result, type, places) {
     const resultItem = document.createElement('div')
+    const lat = result.geometry.location.lat()
+    const long = result.geometry.location.lng()
 
     resultItem.innerHTML = `
-<a href="./Map.html?name=${result.name}">
+<a href="./Map.html?name=${result.name}&lat=${lat}&lon=${long}">
 <div class="d-flex flex-row pb-2 pt-2"> 
     <div class="background-center-center background-cover me-2 pointImg" style="background-image:url('${result?.photos[0]?.getUrl() ?? ""}');"></div>     
     <div class="pointData"> 
