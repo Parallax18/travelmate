@@ -28,18 +28,18 @@ function autoComplete() {
         service.textSearch({
             query: searchInput.value
         }, (places, status, pages) => {
-
-            //Check if search value is a city 
+            //Check if search value is a city
             for (let i = 0; i < places.length; i++) {
-
                 // Create a new object to hold the images in local storage
                 // places[i].image = places[i].photos[0].getUrl();
 
                 if (places[i].types[0] == "locality" && !places[i].business_status) {
+                    console.log(places[i])
                     buildSearchResult(places[i], "locality", places)
                 } else if (places[i].business_status) {    //cities do not have business_status property
                     // get only operational places
                     if (places[i].business_status === "OPERATIONAL") {
+                        console.log(places[i])
                         buildSearchResult(places[i], "others", places)
                     }
                 }

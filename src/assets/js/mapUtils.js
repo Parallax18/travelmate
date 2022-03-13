@@ -3,46 +3,16 @@ var searchInput = document.querySelector('#search-input');
 var getNext;
 var service;
 
+const search = window.location.search.split("=")
+console.log(search)
 
-
-// Build places components
-function buildPlaces(result) {
-    const placeCard = document.createElement('div');
-
-    const photo = '../assets/imgs/heromain.jpg'
-
-    placeCard.innerHTML = `
-<div class="d-flex flex-row pb-2 pt-2"> 
-  <div class="background-center-center background-cover me-2 pointImg" style="background-image:url('${result?.photos[0]?.getUrl() ?? ""}')"></div>                                 
-    <div class="pointData"> 
-        <div class="pointName"> <span>${result.name}</span> 
-        </div>                                     
-        <div class="pointRating"> <span>${result.rating}</span> 
-        </div>                                                                        
-    </div>                                 
-</div>
-`
-    placeCard.addEventListener('click', () => viewOnMap(result))
-    searchResultList.appendChild(placeCard)
-}
-
-
-// If the search was not a country, It will give an array
-// Checking if it is an array or not
-// if (places[0]) {
-//     for (i = 0; i < places.length; i++) {
-//         buildPlaces(places[i])
-//     }
-// } else {
-//     buildPlaces(places)
-// }
-
+const url = search[1].replaceAll("%20", " ");
+console.log(url)
 
 // Initialize map to load first place on the list
 var map;
 var infoWindow;
-
-function initMap() {
+function initMap(places) {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 13,
         mapTypeId: "roadmap",
@@ -75,6 +45,42 @@ function initMap() {
     });
 }
 
+
+// Build places components
+function buildPlaces(result) {
+    console.log(result)
+    const placeCard = document.createElement('div');
+
+    const photo = '../assets/imgs/heromain.jpg'
+
+    placeCard.innerHTML = `
+        <div class="d-flex flex-row pb-2 pt-2"> 
+          <div class="background-center-center background-cover me-2 pointImg" style="background-image:url('${result?.photos[0]?.getUrl() ?? ""}')"></div>                                 
+            <div class="pointData"> 
+                <div class="pointName"> <span>${result.name}</span> 
+                </div>                                     
+                <div class="pointRating"> <span>${result.rating}</span> 
+                </div>                                                                        
+            </div>                                 
+        </div>
+        `
+    placeCard.addEventListener('click', () => viewOnMap(result))
+    searchResultList.appendChild(placeCard)
+}
+
+
+// If the search was not a country, It will give an array
+// Checking if it is an array or not
+// if (places[0]) {
+//     for (i = 0; i < places.length; i++) {
+//         buildPlaces(places[i])
+//     }
+// } else {
+//     buildPlaces(places)
+// }
+
+
+
 // Auto complete function to help get the locations
 function autoComplete() {
     // check if the input field value count is greater than equals to 3
@@ -83,9 +89,10 @@ function autoComplete() {
         service.textSearch({
             query: searchInput.value
         }, (places, status, pages) => {
-
+            console.log(places)
             //Check if search value is a city
             for (let i = 0; i < places.length; i++) {
+                console.log(places[i])
 
                 // Create a new object to hold the images in local storage
                 // places[i].image = places[i].photos[0].getUrl();
